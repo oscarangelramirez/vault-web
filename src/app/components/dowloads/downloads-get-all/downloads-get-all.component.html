@@ -1,0 +1,133 @@
+<div class="d-flex flex-column flex-wrapper">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-color-buzone-primary border-bottom">
+            <a class="navbar-brand" routerLink="/home">
+                <img src="assets/img/logo_banner.png" height="35" class="d-inline-block align-top">
+            </a>
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon-animate spring" [ngClass]="{'is-active': toogle}"
+                    (click)="toogle = !toogle">
+                    <div class="navbar-toggler-icon-animate-box">
+                        <div class="navbar-toggler-icon-animate-inner"></div>
+                    </div>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isPaysheet">
+                        <a class="nav-link" routerLink="/issues/paysheet" routerLinkActive="active">Nóminas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isCfdi">
+                        <a class="nav-link" routerLink="/issues/cfdi" routerLinkActive="active">CFDI's</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && (isCfdi || isPaysheet)">
+                        <a class="nav-link" routerLink="/downloads" routerLinkActive="active">Descargas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isAdmin">
+                        <a class="nav-link" routerLink="/users" routerLinkActive="active">Usuarios</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user">
+                        <button type="button" class="btn btn-primary" (click)="logout()">Cerrar sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-fill">
+        <div class="bg-color-buzone-gray p-2">
+            <h2 class="display-5">Descargas</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="row flex-fill h-100">
+                <div class="col-md-1 col-2 p-0 tool-wrapper">
+                    <div class="bg-dark border-right h-100">
+                        <div class="list-group list-group-flush">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-11 col-10">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-0">
+                                <label class="small">Estado</label>
+                                <select class="form-control form-control-sm" [(ngModel)]="selectedStatus">
+                                    <option value="-1">Todos</option>
+                                    <option value="0">Procesando</option>
+                                    <option value="1">Listo para descarga</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="bg-color-buzone-gray">
+                                        <th>Nombre</th>
+                                        <th>Fecha</th>
+                                        <th>Estado</th>
+                                        <th></th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let download of getDownloads()">
+                                            <td>
+                                                <small>{{ download.name }}</small>
+                                            </td>
+                                            <td><small>{{ download.beginDate | date:'dd/MM/yyyy' }}</small></td>
+                                            <td [ngSwitch]="download.status">
+                                                <small *ngSwitchCase="0">Procesando</small>
+                                                <small *ngSwitchCase="1">Listo para descarga</small>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-link text-danger" *ngIf="download.status==1" ngbTooltip="Descargar archivo" (click)="getDownload(download)">
+                                                    <i class="fa fa-file-download fa-2x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ngb-pagination size="sm" [(page)]="page" [pageSize]="pageSize" [collectionSize]="total"
+                                [maxSize]="3" [rotate]="true" [boundaryLinks]="true">
+                            </ngb-pagination>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="custom-select-sm w-100" [(ngModel)]="pageSize">
+                                <option [ngValue]="5">5 registros</option>
+                                <option [ngValue]="10">10 registros</option>
+                                <option [ngValue]="20">20 registros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="col-lg-12 d-flex justify-content-between">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <img class="img-fluid" src="assets/img/logo_footer.png">
+                        <small class="text-white">Versión: 1.0.0.0</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <small class="text-white">© Copyright 2014 Buzón E. Todos los Derechos Reservados.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

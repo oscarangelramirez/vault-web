@@ -1,0 +1,358 @@
+<div class="d-flex flex-column flex-wrapper">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-color-buzone-primary border-bottom">
+            <a class="navbar-brand" routerLink="/home">
+                <img src="assets/img/logo_banner.png" height="35" class="d-inline-block align-top">
+            </a>
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon-animate spring" [ngClass]="{'is-active': toogle}"
+                    (click)="toogle = !toogle">
+                    <div class="navbar-toggler-icon-animate-box">
+                        <div class="navbar-toggler-icon-animate-inner"></div>
+                    </div>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isPaysheet">
+                        <a class="nav-link" routerLink="/issues/paysheet" routerLinkActive="active">Nóminas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isCfdi">
+                        <a class="nav-link" routerLink="/issues/cfdi" routerLinkActive="active">CFDI's</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && (isCfdi || isPaysheet)">
+                        <a class="nav-link" routerLink="/downloads" routerLinkActive="active">Descargas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isAdmin">
+                        <a class="nav-link" routerLink="/users" routerLinkActive="active">Usuarios</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user">
+                        <button type="button" class="btn btn-primary" (click)="logout()">Cerrar sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-fill">
+        <div class="bg-color-buzone-gray p-2">
+            <h2 class="display-5">CFDI's</h2>
+        </div>
+        <div class="container-fluid">
+            <form [formGroup]="searchForm" (ngSubmit)="search()" novalidate>
+                <div class="row flex-fill h-100">
+                    <div class="col-md-1 col-2 p-0 tool-wrapper">
+                        <div class="bg-dark border-right h-100">
+                            <div class="list-group list-group-flush">
+                                <button type="button" class="btn btn-link text-danger" ngbTooltip="Buscar"
+                                    (click)="search()">
+                                    <i class="fas fa-search fa-2x"></i>
+                                </button>
+                                <button type="button" class="btn btn-link text-danger" ngbTooltip="Limpiar filtros"
+                                    (click)="clear()">
+                                    <i class="fas fa-times fa-2x"></i>
+                                </button>
+                                <button type="button" class="btn btn-link text-danger" ngbTooltip="Descargar todos"
+                                    [disabled]="!checkAllDownload" (click)="addAllCfdisDownload()">
+                                    <i class="fa fa-file-download fa-2x"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-11 col-10">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-12 d-flex align-items-center">
+                                        <h4>Filtros</h4>
+                                        <button type="button" class="btn btn-link" data-toggle="collapse"
+                                            data-target="#collapseSearch" aria-expanded="true"
+                                            aria-controls="collapseSearch">
+                                            <i class="fa fa-angle-down fa-2x"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row collapse show" id="collapseSearch">
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Estado de SAT</label>
+                                            <select class="form-control form-control-sm" formControlName="idStateSAT">
+                                                <option value="0">Todos</option>
+                                                <option value="1">Vigente</option>
+                                                <option value="2">Cancelado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Versión</label>
+                                            <select class="form-control form-control-sm" formControlName="version">
+                                                <option value="">Todos</option>
+                                                <option value="3.2">3.2</option>
+                                                <option value="3.3">3.3</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small">Fecha de Emisión</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <div class="input-group">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="dd/mm/yyyy" name="dateIssueDateFrom"
+                                                            ngbDatepicker #dateIssueDateFrom="ngbDatepicker"
+                                                            formControlName="issueDateFrom">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-sm btn-outline-secondary"
+                                                                (click)="dateIssueDateFrom.toggle()" type="button">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <div class="input-group">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="dd/mm/yyyy" name="dateIssueDateTo"
+                                                            ngbDatepicker #dateIssueDateTo="ngbDatepicker"
+                                                            formControlName="issueDateTo">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-sm btn-outline-secondary"
+                                                                (click)="dateIssueDateTo.toggle()" type="button">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="small">Fecha Timbrado</label>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <div class="input-group">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="dd/mm/yyyy" name="dateRingingDateFrom"
+                                                            ngbDatepicker #dateRingingDateFrom="ngbDatepicker"
+                                                            formControlName="ringingDateFrom">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-sm btn-outline-secondary"
+                                                                (click)="dateRingingDateFrom.toggle()" type="button">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-0">
+                                                    <div class="input-group">
+                                                        <input class="form-control form-control-sm"
+                                                            placeholder="dd/mm/yyyy" name="dateRingingDateTo"
+                                                            ngbDatepicker #dateRingingDateTo="ngbDatepicker"
+                                                            formControlName="ringingDateTo">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-sm btn-outline-secondary"
+                                                                (click)="dateRingingDateTo.toggle()" type="button">
+                                                                <i class="fa fa-calendar"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">UUID</label>
+                                            <input type="text" class="form-control form-control-sm"
+                                                [ngClass]="{'is-invalid': f.uuid.invalid && submitted }"
+                                                placeholder="UUID" formControlName="uuid">
+                                            <div class="invalid-feedback">
+                                                UUID Inválido
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">RFC Emisor</label>
+                                            <input type="text" maxlength="13" class="form-control form-control-sm"
+                                                [ngClass]="{'is-invalid': f.issueRfc.invalid && submitted }"
+                                                placeholder="RFC Emisor" formControlName="issueRfc" uppercase>
+                                            <div class="invalid-feedback">
+                                                RFC Inválido
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Nombre Emisor</label>
+                                            <input type="text" maxlength="260" class="form-control form-control-sm"
+                                                placeholder="Nombre Emisor" formControlName="issue">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Lugar Expedición</label>
+                                            <input type="text" maxlength="150" class="form-control form-control-sm"
+                                                placeholder="Lugar Expedición" formControlName="expeditionPlace">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">RFC Receptor</label>
+                                            <input type="text" maxlength="13" class="form-control form-control-sm"
+                                                [ngClass]="{'is-invalid': f.receiverRfc.invalid && submitted }"
+                                                placeholder="RFC Receptor" formControlName="receiverRfc" uppercase>
+                                            <div class="invalid-feedback">
+                                                RFC Inválido
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Nombre Receptor</label>
+                                            <input type="text" maxlength="260" class="form-control form-control-sm"
+                                                placeholder="Nombre Receptor" formControlName="receiver">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">USO CFDI</label>
+                                            <input type="text" maxlength="5" class="form-control form-control-sm"
+                                                placeholder="USO CFDI" formControlName="use">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Total</label>
+                                            <input type="text" class="form-control form-control-sm"
+                                                [ngClass]="{'is-invalid': f.total.invalid && submitted }"
+                                                placeholder="Total" formControlName="total">
+                                            <div class="invalid-feedback">
+                                                Total Inválido
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group mb-0">
+                                            <label class="small">Moneda</label>
+                                            <input type="text" maxlength="10" class="form-control form-control-sm"
+                                                placeholder="Moneda" formControlName="currency">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-12">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead class="bg-color-buzone-gray">
+                                            <th>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" id="inputCheckboxHeader"
+                                                        class="custom-control-input" [(ngModel)]="isCheckedHeader"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (change)="checkHeader(isCheckedHeader)">
+                                                    <label class="custom-control-label"
+                                                        for="inputCheckboxHeader"></label>
+                                                </div>
+                                            </th>
+                                            <th>Estado SAT</th>
+                                            <th>Fecha Emisión</th>
+                                            <th>UUID</th>
+                                            <th>RFC Emisor</th>
+                                            <th>Lugar Expedición</th>
+                                            <th>RFC Receptor</th>
+                                            <th>Nombre Receptor</th>
+                                            <th>Total</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let cfdi of cfdis.content">
+                                                <td>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" id="inputCheckbox{{cfdi.id}}"
+                                                            class="custom-control-input" [(ngModel)]="cfdi.isSelected"
+                                                            [ngModelOptions]="{standalone: true}">
+                                                        <label class="custom-control-label"
+                                                            for="inputCheckbox{{cfdi.id}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td [ngSwitch]="cfdi.idStateSAT">
+                                                    <small *ngSwitchCase="1">Vigente</small>
+                                                    <small *ngSwitchCase="2">Cancelado</small>
+                                                </td>
+                                                <td><small>{{ cfdi.issueDate | date:'dd/MM/yyyy' }}</small></td>
+                                                <td><small>{{ cfdi.uuid }}</small></td>
+                                                <td><small>{{ cfdi.issueRfc }}</small></td>
+                                                <td><small>{{ cfdi.expeditionPlace }}</small></td>
+                                                <td><small>{{ cfdi.receiverRfc }}</small></td>
+                                                <td><small>{{ cfdi.receiver }}</small></td>
+                                                <td><small>{{ cfdi.total | number:'2.1-4'}} {{ cfdi.currency }}</small>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="10">
+                                                    <button type="button" class="btn btn-outline-secondary"
+                                                        ngbTooltip="Descargar seleccionados" [disabled]="!checkDownload" (click)="addDownload()">
+                                                        <i class="fa fa-file-download"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ngb-pagination size="sm" [(page)]="page.page" [pageSize]="page.size"
+                                    [collectionSize]="cfdis.totalElements" [maxSize]="3" [rotate]="true"
+                                    [boundaryLinks]="true" (pageChange)="onChangePage($event)">
+                                </ngb-pagination>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="custom-select-sm w-100" [(ngModel)]="page.size"
+                                    [ngModelOptions]="{standalone: true}" (ngModelChange)="onChangePageSize($event)">
+                                    <option [ngValue]="5">5 registros</option>
+                                    <option [ngValue]="10">10 registros</option>
+                                    <option [ngValue]="20">20 registros</option>
+                                    <option [ngValue]="50">50 registros</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="col-lg-12 d-flex justify-content-between">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <img class="img-fluid" src="assets/img/logo_footer.png">
+                        <small class="text-white">Versión: 1.0.0.0</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <small class="text-white">© Copyright 2014 Buzón E. Todos los Derechos Reservados.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>

@@ -1,0 +1,53 @@
+<div class="h-100 d-flex flex-column justify-content-end background">
+    <div class="row mx-0 h-100 justify-content-center align-items-center">
+        <div class="card">
+            <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                    <img class="img-fluid mt-3" src="assets/img/logo_login.png" width="250" alt="logo">
+                </div>
+            </div>
+            <div class="card-body">
+                <h1 class="display-4 text-buzone-gray">Bienvenido</h1>
+                <form [formGroup]="loginForm" [ngClass]="{'was-validated': submitted}" (ngSubmit)="login()" #formElement>
+                    <div class="form-group">
+                        <label for="inputEmail"><strong>Usuario</strong></label>
+                        <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp"
+                            placeholder="Ingrese su usuario" formControlName="email" required>
+                        <div class="invalid-feedback">
+                            El usuario es requerido
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword"><strong>Contraseña</strong></label>
+                        <input type="password" class="form-control" id="inputPassword"
+                            placeholder="Ingrese su contraseña" formControlName="password" required>
+                        <div class="invalid-feedback">
+                            La contraseña es requerida
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                </form>
+                <div class="row mt-3">
+                    <div class="col-md-12 d-flex justify-content-center">
+                        <a routerLink="/users/password/recovery" class="text-dark">Olvide mis datos de acceso</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mx-0 footer">
+        <div class="col-lg-12 d-flex justify-content-between">
+            <div class="row">
+                <div class="col-lg-12">
+                    <img class="img-fluid" src="assets/img/logo_footer.png">
+                    <small class="text-white">Versión: 1.0.0.0</small>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <small class="text-white">© Copyright 2014 Buzón E. Todos los Derechos Reservados.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

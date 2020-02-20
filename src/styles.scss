@@ -1,1 +1,170 @@
-/* You can add global styles to this file, and also import other style files */
+@import "variables.scss";
+
+body, .flex-wrapper {
+  min-height:100vh;
+}
+
+.tool-wrapper{
+  min-height: calc(100vh - 180px);
+}
+
+.bg-color-buzone-primary{
+    background-color: $color-buzone-primary;
+}
+
+.bg-color-buzone-secondary{
+    background-color: $color-buzone-secondary;
+}
+
+.bg-color-buzone-third{
+    background-color: $color-buzone-third;
+}
+
+.bg-color-buzone-gray{
+    background-color: $color-buzone-gray;
+}
+
+.text-buzone-primary{
+    color: $color-text-buzone-primary;
+}
+
+.text-buzone-secondary{
+    color: $color-text-buzone-secondary;
+}
+
+.text-buzone-third{
+    color: $color-text-buzone-third;
+}
+
+.text-buzone-gray{
+    color: $color-text-buzone-gray;
+}
+
+.btn-primary{
+    background-color: $color-buzone-primary;
+    border-color: $color-buzone-primary;
+}
+
+.btn-primary:hover{
+    background-color: $color-buzone-primary;
+    border-color: $color-buzone-primary;
+}
+
+.nav-link{
+    color: $color-text-buzone-white;
+}
+
+.nav-link:hover{
+    color: $color-text-buzone-gray;
+}
+
+.nav-link.active {
+    border-bottom: $color-text-buzone-white 2px solid;
+}
+
+.navbar-toggler-icon-animate {
+	display: inline-block;
+	cursor: pointer;
+	transition-property: opacity, filter;
+	transition-duration: 0.15s;
+	transition-timing-function: linear;
+	font: inherit;
+	color: inherit;
+	text-transform: none;
+	background-color: transparent;
+	border: 0;
+	margin: 0;
+	overflow: visible;
+}
+
+.navbar-toggler-icon-animate:hover {
+	opacity: 0.7;
+}
+
+.navbar-toggler-icon-animate.is-active:hover {
+	opacity: 0.7;
+}
+
+.navbar-toggler-icon-animate.is-active .navbar-toggler-icon-animate-inner,
+.navbar-toggler-icon-animate.is-active .navbar-toggler-icon-animate-inner::before,
+.navbar-toggler-icon-animate.is-active .navbar-toggler-icon-animate-inner::after {
+	background-color: #000;
+}
+
+.navbar-toggler-icon-animate-box {
+	width: 40px;
+	height: 24px;
+	display: inline-block;
+	position: relative;
+}
+
+.navbar-toggler-icon-animate-inner {
+	display: block;
+	top: 50%;
+	margin-top: -2px;
+}
+
+.navbar-toggler-icon-animate-inner,
+.navbar-toggler-icon-animate-inner::before,
+.navbar-toggler-icon-animate-inner::after {
+	width: 40px;
+	height: 4px;
+	background-color: #000;
+	border-radius: 4px;
+	position: absolute;
+	transition-property: transform;
+	transition-duration: 0.15s;
+	transition-timing-function: ease;
+}
+
+.navbar-toggler-icon-animate-inner::before,
+.navbar-toggler-icon-animate-inner::after {
+	content: "";
+	display: block;
+}
+
+.navbar-toggler-icon-animate-inner::before {
+	top: -10px;
+}
+
+.navbar-toggler-icon-animate-inner::after {
+	bottom: -10px;
+}
+
+.navbar-toggler-icon-animate.spring .navbar-toggler-icon-animate-inner {
+	top: 2px;
+	transition: background-color 0s 0.13s linear;
+}
+
+.navbar-toggler-icon-animate.spring .navbar-toggler-icon-animate-inner::before {
+	top: 10px;
+	transition: top 0.1s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.navbar-toggler-icon-animate.spring .navbar-toggler-icon-animate-inner::after {
+	top: 20px;
+	transition: top 0.2s 0.2s cubic-bezier(0.33333, 0.66667, 0.66667, 1), transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.navbar-toggler-icon-animate.spring.is-active .navbar-toggler-icon-animate-inner {
+	transition-delay: 0.22s;
+	background-color: transparent !important;
+}
+
+.navbar-toggler-icon-animate.spring.is-active .navbar-toggler-icon-animate-inner::before {
+	top: 0;
+	transition: top 0.1s 0.15s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+	transform: translate3d(0, 10px, 0) rotate(45deg);
+}
+
+.navbar-toggler-icon-animate.spring.is-active .navbar-toggler-icon-animate-inner::after {
+	top: 0;
+	transition: top 0.2s cubic-bezier(0.33333, 0, 0.66667, 0.33333), transform 0.13s 0.22s cubic-bezier(0.215, 0.61, 0.355, 1);
+	transform: translate3d(0, 10px, 0) rotate(-45deg);
+}
+
+.footer{
+  height: 30px;
+  width: 100%;
+  background-color: #000;
+}

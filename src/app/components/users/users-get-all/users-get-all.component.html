@@ -1,0 +1,149 @@
+<div class="d-flex flex-column flex-wrapper">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-color-buzone-primary border-bottom">
+            <a class="navbar-brand" routerLink="/home">
+                <img src="assets/img/logo_banner.png" height="35" class="d-inline-block align-top">
+            </a>
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon-animate spring" [ngClass]="{'is-active': toogle}"
+                    (click)="toogle = !toogle">
+                    <div class="navbar-toggler-icon-animate-box">
+                        <div class="navbar-toggler-icon-animate-inner"></div>
+                    </div>
+                </span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/home" routerLinkActive="active">Inicio</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isPaysheet">
+                        <a class="nav-link" routerLink="/issues/paysheet" routerLinkActive="active">Nóminas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isCfdi">
+                        <a class="nav-link" routerLink="/issues/cfdi" routerLinkActive="active">CFDI's</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && (isCfdi || isPaysheet)">
+                        <a class="nav-link" routerLink="/downloads" routerLinkActive="active">Descargas</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user && isAdmin">
+                        <a class="nav-link" routerLink="/users" routerLinkActive="active">Usuarios</a>
+                    </li>
+                    <li class="nav-item" *ngIf="user">
+                        <button type="button" class="btn btn-primary" (click)="logout()">Cerrar sesión</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-fill">
+        <div class="bg-color-buzone-gray p-2">
+            <h2 class="display-5">Usuarios</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="row flex-fill h-100">
+                <div class="col-md-1 col-2 p-0 tool-wrapper">
+                    <div class="bg-dark border-right h-100">
+                        <div class="list-group list-group-flush">
+                            <button type="button" class="btn btn-link text-danger" ngbTooltip="Agregar" (click)="add()">
+                                <i class="fa fa-plus fa-2x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-11 col-10">
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <input class="form-control" type="text" name="searchTerm" [(ngModel)]="searchTerm"
+                                        placeholder="Buscar">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="bg-color-buzone-gray">
+                                        <th>Nombre</th>
+                                        <th>Apellido</th>
+                                        <th>Correo electrónico</th>
+                                        <th>Bloqueado</th>
+                                        <th>Activo</th>
+                                        <th>Rol</th>
+                                        <th>Editar</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let user of getUsers()">
+                                            <td><small>{{ user.name }}</small></td>
+                                            <td><small>{{ user.lastName }}</small></td>
+                                            <td><small>{{ user.email }}</small></td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input id="inputIsLocked{{ user.id }}" type="checkbox" class="custom-control-input" [ngModel]="user.isLocked" disabled>
+                                                    <label class="custom-control-label" for="inputIsLocked{{ user.id }}"></label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input id="inputIsActive{{ user.id }}" type="checkbox" class="custom-control-input" [ngModel]="user.isActive" disabled>
+                                                    <label class="custom-control-label" for="inputIsActive{{ user.id }}"></label>
+                                                </div>
+                                            </td>
+                                            <td [ngSwitch]="user.role">
+                                                <small *ngSwitchCase="'Admin'">Administrador</small>
+                                                <small *ngSwitchCase="'Cfdi'">CFDI</small>
+                                                <small *ngSwitchCase="'Paysheet'">Nómina</small>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-link text-primary p-0" ngbTooltip="Editar" (click)="edit(user)">
+                                                    <i class="fas fa-edit fa-2x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <ngb-pagination [(page)]="page" [pageSize]="pageSize" [collectionSize]="total" [maxSize]="3"
+                                [rotate]="true" [boundaryLinks]="true">
+                            </ngb-pagination>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="custom-select w-100" [(ngModel)]="pageSize">
+                                <option [ngValue]="5">5 registros</option>
+                                <option [ngValue]="10">10 registros</option>
+                                <option [ngValue]="20">20 registros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="footer">
+            <div class="col-lg-12 d-flex justify-content-between">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <img class="img-fluid" src="assets/img/logo_footer.png">
+                        <small class="text-white">Versión: 1.0.0.0</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <small class="text-white">© Copyright 2014 Buzón E. Todos los Derechos Reservados.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
